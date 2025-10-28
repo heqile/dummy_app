@@ -12,6 +12,15 @@ wheels = [
 ]
 
 [[package]]
+name = "certifi"
+version = "2025.10.5"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/4c/5b/b6ce21586237c77ce67d01dc5507039d444b630dd76611bbca2d8e5dcd91/certifi-2025.10.5.tar.gz", hash = "sha256:47c09d31ccf2acf0be3f701ea53595ee7e0b8fa08801c6624be771df09ae7b43", size = 164519, upload-time = "2025-10-05T04:12:15.808Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e4/37/af0d2ef3967ac0d6113837b44a4f0bfe1328c2b9763bd5b1744520e5cfed/certifi-2025.10.5-py3-none-any.whl", hash = "sha256:0f212c2744a9bb6de0c56639a6f68afe01ecd92d91f14ae897c4fe7bbeeef0de", size = 163286, upload-time = "2025-10-05T04:12:14.03Z" },
+]
+
+[[package]]
 name = "django"
 version = "5.1"
 source = { registry = "https://pypi.org/simple" }
@@ -31,10 +40,26 @@ version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
     { name = "django" },
+    { name = "requests" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "django", specifier = ">=5.1.0" }]
+requires-dist = [
+    { name = "django", specifier = ">=5.1.0,<=5.2" },
+    { name = "requests", specifier = "==2.4.0" },
+]
+
+[[package]]
+name = "requests"
+version = "2.4.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "certifi" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/ef/a0/9863b20b6a87e45cd4353c10277d9674f9ddfd7c28c58e61a339e273a119/requests-2.4.0.tar.gz", hash = "sha256:7007e03cbc73e357b5055c6ea0ad6e447e2afa00f1a1f843cd792a1ebaa3763e", size = 436334, upload-time = "2014-08-29T14:32:45.073Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/78/14/23cf8ede304c7c8b69b929b17074292073827239c31659ab8c7beb22a059/requests-2.4.0-py2.py3-none-any.whl", hash = "sha256:8b2cc9e334b3e66aa5df15f2e4967f2c95b5164a4e6df7e92dd70ca67400912a", size = 457810, upload-time = "2014-08-29T14:32:48.896Z" },
+]
 
 [[package]]
 name = "sqlparse"
