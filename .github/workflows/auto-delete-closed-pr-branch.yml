@@ -28,9 +28,21 @@ jobs:
             // skip if merged and you already use the built-in auto-delete
             if (context.payload.pull_request.merged) return;
 
-            await github.rest.git.deleteRef({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              ref: `heads/${branch}`,
-            });
-            core.info(`Deleted branch: ${branch}`);
+            try {
+              await github.rest.git.deleteRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: `heads/${branch}`,
+              });
+              core.info(`Deleted branch: ${branch}`);
+            } catch (err) {
+              // err.status will be available for the REST error; handle common cases gracefully
+              if (err && (err.status === 404 || err.status === 422)) {
+                core.info(`Branch '${branch}' not found or already deleted: ${err.message}`);
+              } else if (err && err.status === 403) {
+                core.warning(`Permission denied when deleting branch '${branch}'. It may be protected or require elevated permissions: ${err.message}`);
+              } else {
+                // rethrow unknown errors to surface them
+                throw err;
+              }
+            }
