@@ -38,9 +38,9 @@ jobs:
             } catch (err) {
               // err.status will be available for the REST error; handle common cases gracefully
               if (err && (err.status === 404 || err.status === 422)) {
-                core.info(`Branch '${branch}' not found or already deleted: ${err.message}`);
+                core.info(`Branch '${branch}' can not be deleted: ${err.message}`);
               } else if (err && err.status === 403) {
-                core.warning(`Permission denied when deleting branch '${branch}'. It may be protected or require elevated permissions: ${err.message}`);
+                core.warning(`Permission denied when deleting branch '${branch}': ${err.message}`);
               } else {
                 // rethrow unknown errors to surface them
                 throw err;
