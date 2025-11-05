@@ -72,7 +72,7 @@ def main():
         "detector": {
             "name": "uv-dependency-submission",
             "version": "1.0.0",
-            "url": f"{os.environ['GITHUB_SERVER_URL']/os.environ['GITHUB_REPOSITORY']}",
+            "url": f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}",
         },
     }
     manifests = {}
