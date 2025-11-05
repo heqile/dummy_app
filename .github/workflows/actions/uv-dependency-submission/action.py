@@ -8,12 +8,13 @@ import json
 import os
 import subprocess
 import tomllib
+from pathlib import Path
 from typing import Any
 
 
 def uvlock_to_manifest(filename: str) -> dict[str, Any]:
     """Return manifest from an individual uv.lock file."""
-    with open(filename, "rb") as file:
+    with Path(filename).open("rb") as file:
         data = tomllib.load(file)
         if data["version"] != 1:
             raise NotImplementedError(f"unsupported uv.lock version {data['version']}")
@@ -37,18 +38,18 @@ def uvlock_to_manifest(filename: str) -> dict[str, Any]:
         for package in dependencies.values():
             if package["source"].get("registry") is None:
                 continue
-            entry: dict[str, str | list[str]] = {
+            item: dict[str, str | list[str]] = {
                 "package_url": f"pkg:pypi/{package['name']}@{package['version']}",
                 "relationship": package.get("relationship", "indirect"),
             }
             if "scope" in package:
-                entry["scope"] = package["scope"]
+                item["scope"] = package["scope"]
             if "dependencies" in package:
-                transitive: list[str] = []
-                for dep in package["dependencies"]:
-                    transitive.append(f"{dep['name']}@{dependencies[dep['name']]['version']}")
-                entry["dependencies"] = transitive
-            resolved[f"{package['name']}@{package['version']}"] = entry
+                transitive: list[str] = [
+                    f"{dep['name']}@{dependencies[dep['name']]['version']}" for dep in package["dependencies"]
+                ]
+                item["dependencies"] = transitive
+            resolved[f"{package['name']}@{package['version']}"] = item
 
         return {
             "name": filename,
@@ -65,7 +66,10 @@ def main():
         "job": {
             "id": os.environ["GITHUB_JOB"],
             "correlator": f"{os.environ['GITHUB_WORKFLOW']}-{os.environ['GITHUB_JOB']}",
-            "html_url": f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}/actions/runs/{os.environ['GITHUB_JOB']}",
+            "html_url": (
+                f"{os.environ['GITHUB_SERVER_URL']}/{os.environ['GITHUB_REPOSITORY']}"
+                f"/actions/runs/{os.environ['GITHUB_JOB']}"
+            ),
         },
         "sha": os.environ["GITHUB_SHA"],
         "ref": os.environ["GITHUB_REF"],
@@ -99,9 +103,9 @@ def main():
         "-",
     ]
     try:
-        print(subprocess.check_output(cmd, input=postdata, stderr=subprocess.STDOUT, universal_newlines=True))
+        print(subprocess.check_output(cmd, input=postdata, stderr=subprocess.STDOUT, universal_newlines=True))  # noqa: T201
     except subprocess.CalledProcessError as e:
-        print(e.output)
+        print(e.output)  # noqa: T201
         raise
 
 
