@@ -8,8 +8,10 @@ updates:
   - package-ecosystem: "github-actions"
     directories:
       - "/"
+      - "/actions/*"
+      - "/.github/actions/*"
     schedule:
       # interval: cron
       # cronjob: '30 5 6 * *' # At 05:30 on day-of-month 6
       interval: daily
-      time: "15:50"
+      time: "15:54"
