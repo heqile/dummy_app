@@ -42,13 +42,14 @@ runs:
           exit 0
         fi
 
-        git fetch origin ${BASE_BRANCH}
+        # check if there is difference between base and new branch
+        git fetch --no-tags --depth=1 origin ${BASE_BRANCH}
         if git diff --quiet "origin/${BASE_BRANCH}" "${PR_BRANCH}"; then
           echo "No changes between ${BASE_BRANCH} and ${PR_BRANCH}; skipping PR creation."
           exit 0
         fi
         
-        git push -u --force origin "${PR_BRANCH}"
+        git push --set-upstream --force origin "${PR_BRANCH}"
 
         gh pr create \
           --base "${BASE_BRANCH}" \
