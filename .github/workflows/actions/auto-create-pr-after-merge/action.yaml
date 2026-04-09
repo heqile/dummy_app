@@ -5,7 +5,7 @@ runs:
   steps:
     - name: Checkout
       uses: actions/checkout@v6
-    - name: Create back-merge PR
+    - name: Create or update back-merge PR
       shell: bash
       env:
         GH_TOKEN: ${{ github.token }}
