@@ -43,8 +43,8 @@ runs:
         fi
 
         git fetch origin ${BASE_BRANCH}
-        if git diff --quiet "origin/${BASE_BRANCH}" "${CREATED_BRANCH}"; then
-          echo "No changes between ${BASE_BRANCH} and ${CREATED_BRANCH}; skipping PR creation."
+        if git diff --quiet "origin/${BASE_BRANCH}" "${PR_BRANCH}"; then
+          echo "No changes between ${BASE_BRANCH} and ${PR_BRANCH}; skipping PR creation."
           exit 0
         fi
         
