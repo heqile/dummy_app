@@ -16,9 +16,6 @@ runs:
         PR_TITLE="Back-merge ${HEAD_BRANCH} into ${BASE_BRANCH}"
         PR_BODY="Automated PR to sync changes from '${HEAD_BRANCH}' back into '${BASE_BRANCH}'."
         
-        git checkout -b "$CREATED_BRANCH"
-        git push -u origin "${CREATED_BRANCH}"
-
         existing_pr_number="$(
           gh pr list \
             --base "${BASE_BRANCH}" \
@@ -32,6 +29,9 @@ runs:
           echo "Open PR already exists: #$existing_pr_number"
           exit 0
         fi
+
+        git checkout -b "$CREATED_BRANCH"
+        git push -u origin "${CREATED_BRANCH}"
 
         gh pr create \
           --base "${BASE_BRANCH}" \
