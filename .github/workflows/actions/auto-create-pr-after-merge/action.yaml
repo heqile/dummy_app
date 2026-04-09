@@ -19,7 +19,7 @@ runs:
         existing_pr_number="$(
           gh pr list \
             --base "${BASE_BRANCH}" \
-            --head "${HEAD_BRANCH}" \
+            --head "${CREATED_BRANCH}" \
             --state open \
             --json number \
             --jq '.[0].number // empty'
