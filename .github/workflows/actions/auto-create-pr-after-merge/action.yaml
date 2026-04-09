@@ -1,40 +1,48 @@
 name: auto-create-pr-after-merge
-description: Create PR to default branch automatically after merge a PR to a target branch # test
+description: Create PR to default branch automatically after merge a PR to a target branch (only 'main' and 'release/*' branches are supported)
 runs:
   using: "composite"
   steps:
     - name: Checkout
       uses: actions/checkout@v6
-    - name: Create or update back-merge PR
+    - name: Create back-merge PR
       shell: bash
       env:
         GH_TOKEN: ${{ github.token }}
       run: |
         BASE_BRANCH="${{ github.event.repository.default_branch }}"
         HEAD_BRANCH="${GITHUB_REF_NAME}"
-        CREATED_BRANCH="feature/sync_to_dev"
         PR_TITLE="Back-merge ${HEAD_BRANCH} into ${BASE_BRANCH}"
         PR_BODY="Automated PR to sync changes from '${HEAD_BRANCH}' back into '${BASE_BRANCH}'."
-        
-        existing_pr_number="$(
+
+        if [[ "${HEAD_BRANCH}" == "main" ]]; then
+          PR_BRANCH="feature/main_to_dev"
+        elif [[ "${HEAD_BRANCH}" == release/* ]]; then
+          PR_BRANCH="feature/release_to_dev"
+        else
+          echo "Unsupported source branch: ${HEAD_BRANCH}"
+          exit 1
+        fi
+
+        EXISTING_PR_NUMBER="$(
           gh pr list \
             --base "${BASE_BRANCH}" \
-            --head "${CREATED_BRANCH}" \
+            --head "${PR_BRANCH}" \
             --state open \
             --json number \
             --jq '.[0].number // empty'
         )"
 
-        if [ -n "$existing_pr_number" ]; then
-          echo "Open PR already exists: #$existing_pr_number"
+        if [ -n "$EXISTING_PR_NUMBER" ]; then
+          echo "Open PR already exists: #$EXISTING_PR_NUMBER"
           exit 0
         fi
 
-        git checkout -b "$CREATED_BRANCH"
-        git push -u origin "${CREATED_BRANCH}"
+        git checkout -b "${PR_BRANCH}"
+        git push -u origin "${PR_BRANCH}"
 
         gh pr create \
           --base "${BASE_BRANCH}" \
-          --head "${CREATED_BRANCH}" \
+          --head "${PR_BRANCH}" \
           --title "${PR_TITLE}" \
           --body "${PR_BODY}"
