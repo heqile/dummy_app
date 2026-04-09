@@ -24,6 +24,8 @@ runs:
           exit 1
         fi
 
+        git checkout -b "${PR_BRANCH}"
+
         EXISTING_PR_NUMBER="$(
           gh pr list \
             --base "${BASE_BRANCH}" \
@@ -40,7 +42,6 @@ runs:
           exit 0
         fi
 
-        git checkout -b "${PR_BRANCH}"
         git push -u origin "${PR_BRANCH}"
 
         gh pr create \
