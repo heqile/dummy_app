@@ -19,19 +19,19 @@ runs:
         git checkout -b "$CREATED_BRANCH"
         git push -u origin "${CREATED_BRANCH}"
 
-        # existing_pr_number="$(
-        #   gh pr list \
-        #     --base "${BASE_BRANCH}" \
-        #     --head "${HEAD_BRANCH}" \
-        #     --state open \
-        #     --json number \
-        #     --jq '.[0].number // empty'
-        # )"
+        existing_pr_number="$(
+          gh pr list \
+            --base "${BASE_BRANCH}" \
+            --head "${HEAD_BRANCH}" \
+            --state open \
+            --json number \
+            --jq '.[0].number // empty'
+        )"
 
-        # if [ -n "$existing_pr_number" ]; then
-        #   echo "Open PR already exists: #$existing_pr_number"
-        #   exit 0
-        # fi
+        if [ -n "$existing_pr_number" ]; then
+          echo "Open PR already exists: #$existing_pr_number"
+          exit 0
+        fi
 
         gh pr create \
           --base "${BASE_BRANCH}" \
