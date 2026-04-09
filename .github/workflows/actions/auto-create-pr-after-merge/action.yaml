@@ -37,7 +37,7 @@ runs:
         if [ -n "$EXISTING_PR_NUMBER" ]; then
           echo "Open PR already exists: #$EXISTING_PR_NUMBER"
           # update branch
-          git pull origin "${PR_BRANCH}"
+          git fetch origin "${PR_BRANCH}"
           git checkout "${PR_BRANCH}"
           git rebase "${HEAD_BRANCH}"
           git push origin "${PR_BRANCH}"
