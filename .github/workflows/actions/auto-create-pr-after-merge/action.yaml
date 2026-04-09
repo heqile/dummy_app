@@ -48,7 +48,7 @@ runs:
           exit 0
         fi
         
-        git push -u origin "${PR_BRANCH}"
+        git push -u --force origin "${PR_BRANCH}"
 
         gh pr create \
           --base "${BASE_BRANCH}" \
