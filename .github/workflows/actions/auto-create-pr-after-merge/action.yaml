@@ -1,5 +1,5 @@
 name: auto-create-pr-after-merge
-description: Create PR to default branch automatically after merge a PR to a target branch
+description: Create PR to default branch automatically after merge a PR to a target branch # test
 runs:
   using: "composite"
   steps:
