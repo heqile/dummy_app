@@ -24,6 +24,7 @@ runs:
           exit 1
         fi
 
+        git checkout -b "${PR_BRANCH}"
 
         EXISTING_PR_NUMBER="$(
           gh pr list \
@@ -37,14 +38,10 @@ runs:
         if [ -n "$EXISTING_PR_NUMBER" ]; then
           echo "Open PR already exists: #$EXISTING_PR_NUMBER"
           # update branch
-          git fetch origin "${PR_BRANCH}"
-          git checkout "${PR_BRANCH}"
-          git rebase "${HEAD_BRANCH}"
-          git push origin "${PR_BRANCH}"
+          git push --force origin "${PR_BRANCH}"
           exit 0
         fi
 
-        git checkout -b "${PR_BRANCH}"
         git push -u origin "${PR_BRANCH}"
 
         gh pr create \
