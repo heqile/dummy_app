@@ -17,6 +17,7 @@ runs:
         PR_BODY="Automated PR to sync changes from '${HEAD_BRANCH}' back into '${BASE_BRANCH}'."
         
         git checkout -b "$CREATED_BRANCH"
+        git push -u origin "${CREATED_BRANCH}"
 
         # existing_pr_number="$(
         #   gh pr list \
