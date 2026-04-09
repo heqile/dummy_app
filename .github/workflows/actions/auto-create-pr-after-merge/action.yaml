@@ -42,7 +42,7 @@ runs:
           exit 0
         fi
 
-        if git diff --quiet "${BASE_BRANCH}" "${CREATED_BRANCH}"; then
+        if git diff --quiet "origin/${BASE_BRANCH}" "${CREATED_BRANCH}"; then
           echo "No changes between ${BASE_BRANCH} and ${CREATED_BRANCH}; skipping PR creation."
           exit 0
         fi
