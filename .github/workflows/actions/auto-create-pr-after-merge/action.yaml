@@ -6,13 +6,39 @@ runs:
     - name: Checkout
       uses: actions/checkout@v6
     - name: Create or update back-merge PR
-      uses: peter-evans/create-pull-request@v8
-      with:
-        branch: feature/sync_to_dev
-        base: ${{ github.event.repository.default_branch }}
-        title: "Sync ${{ env.GITHUB_REF_NAME }} into ${{ github.event.repository.default_branch }}"
+      shell: bash
+      run: |
+        BASE_BRANCH="${{ github.event.repository.default_branch }}"
+        HEAD_BRANCH="${{ env.GITHUB_REF_NAME }}"
+        CREATED_BRANCH="feature/sync_to_dev"
+        PR_TITLE="Back-merge $HEAD_BRANCH into $BASE_BRANCH"
+        PR_BODY="Automated PR to sync changes from `$HEAD_BRANCH` back into `$BASE_BRANCH`."
+        
+        git checkout -b "$CREATED_BRANCH"
+
+        # existing_pr_number="$(
+        #   gh pr list \
+        #     --base "$BASE_BRANCH" \
+        #     --head "$HEAD_BRANCH" \
+        #     --state open \
+        #     --json number \
+        #     --jq '.[0].number // empty'
+        # )"
+
+        # if [ -n "$existing_pr_number" ]; then
+        #   echo "Open PR already exists: #$existing_pr_number"
+        #   exit 0
+        # fi
+
+        gh pr create \
+          --base "$BASE_BRANCH" \
+          --head "$CREATED_BRANCH" \
+          --title "$PR_TITLE" \
+          --body "$PR_BODY"
+
+
+        base: ${{ inputs.base_branch }}
+        title: "Sync ${{ env.GITHUB_REF_NAME }} into develop"
         body: |
           Automated PR to sync changes from `${{ env.GITHUB_REF_NAME }}` back into `${{ github.event.repository.default_branch }}`.
-        commit-message: "sync back-merge ${{ env.GITHUB_REF_NAME }} into ${{ github.event.repository.default_branch }}"
-        delete-branch: true
-        sign-commits: true
+        commit-message: "sync back-merge main into develop"
