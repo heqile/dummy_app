@@ -12,7 +12,7 @@ runs:
         HEAD_BRANCH="${{ env.GITHUB_REF_NAME }}"
         CREATED_BRANCH="feature/sync_to_dev"
         PR_TITLE="Back-merge $HEAD_BRANCH into $BASE_BRANCH"
-        PR_BODY="Automated PR to sync changes from `$HEAD_BRANCH` back into `$BASE_BRANCH`."
+        PR_BODY="Automated PR to sync changes from '$HEAD_BRANCH' back into '$BASE_BRANCH'."
         
         git checkout -b "$CREATED_BRANCH"
 
@@ -40,5 +40,5 @@ runs:
         base: ${{ inputs.base_branch }}
         title: "Sync ${{ env.GITHUB_REF_NAME }} into develop"
         body: |
-          Automated PR to sync changes from `${{ env.GITHUB_REF_NAME }}` back into `${{ github.event.repository.default_branch }}`.
+          Automated PR to sync changes from '${{ env.GITHUB_REF_NAME }}' back into '${{ github.event.repository.default_branch }}'.
         commit-message: "sync back-merge main into develop"
