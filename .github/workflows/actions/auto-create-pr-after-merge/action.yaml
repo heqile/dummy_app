@@ -4,7 +4,7 @@ runs:
   using: "composite"
   steps:
     - name: Checkout
-      uses: actions/checkout@v6
+      uses: actions/checkout@v7
     - name: Create or update back-merge PR
       shell: bash
       env:
