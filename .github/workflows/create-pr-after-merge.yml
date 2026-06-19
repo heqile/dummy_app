@@ -15,6 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: auto-create-pr-after-merge
         uses: ./.github/workflows/actions/auto-create-pr-after-merge
